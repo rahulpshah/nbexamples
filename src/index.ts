@@ -13,8 +13,9 @@ const extension: JupyterFrontEndPlugin<void> = {
   activate: (app: JupyterFrontEnd) => {
     console.log('JupyterLab extension nbexamples-jlab is activated!');
     const { commands } = app;
-    const widget: ExamplesPalette = new ExamplesPalette({ commands });
+    const widget: ExamplesPalette = new ExamplesPalette(app.shell, { commands });
     app.shell.add(widget, 'left');
+    
   }
 };
 
