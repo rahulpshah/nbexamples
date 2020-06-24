@@ -109,10 +109,10 @@ class Examples(LoggingConfigurable):
             raise web.HTTPError(404, "Example not found: %s" % fp)
         p = sp.Popen(['jupyter', 'nbconvert', '--to', 'html', '--stdout', fp],
                      stdout=sp.PIPE, stderr=sp.PIPE)
-        output, _ = p.communicate()
+        output, err = p.communicate()
         retcode = p.poll()
         if retcode != 0:
-            raise RuntimeError('nbconvert exited with code {}'.format(retcode))
+            raise RuntimeError('nbconvert exited with code {} and err {}'.format(retcode, err))
         return output.decode()
 
     def delete_example(self, filepath):
