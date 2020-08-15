@@ -8,27 +8,31 @@ import {
   MainAreaWidget,
 } from '@jupyterlab/apputils';
 
-// const HELP_CLASS = 'jp-Help';
+
+const IFRAME_CLASS = 'jp-iframe';
 const namespace = 'preview-doc';
 let counter = 0;
 
 
+import  {PreviewWidget} from './preview';
 
-function newPreviewWidget(url: string, text: string): MainAreaWidget<IFrame> {
+
+function newPreviewWidget(url: string, text: string): MainAreaWidget<PreviewWidget> {
   // Allow scripts and forms so that things like
   // readthedocs can use their search functionality.
   // We *don't* allow same origin requests, which
   // can prevent some content from being loaded onto the
   // help pages.
-  const content = new IFrame({
+  const iframeContent = new IFrame({
     sandbox: ['allow-scripts', 'allow-forms']
   });
-  content.url = url;
-  // content.addClass(HELP_CLASS);
-  content.title.label = text;
+  iframeContent.url = url;
+  iframeContent.addClass(IFRAME_CLASS);
+  
+  const content = new PreviewWidget(iframeContent);
   content.id = `${namespace}-${++counter}`;
+  content.title.label = text;
   const widget = new MainAreaWidget({ content });
-  widget.addClass('jp-Help');
   return widget;
 }
 
